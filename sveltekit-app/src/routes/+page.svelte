@@ -16,7 +16,7 @@
   let selectedPost = null;
 
   const categories = ['gallery', 'diary', 'about'];
-  const mediaTypes = ['audio', 'photo', 'video'];
+  const mediaTypes = ['audio', 'photo', 'video']; 
 
   $: filteredPosts = posts?.filter(post => {
     if (!post.tags) return false; 
@@ -66,32 +66,29 @@
 
 
 <div class="column3">
-  {#if selectedCategory === 'gallery'}
-    {#if selectedMedia}
-      <ul>
-        {@html brTagsColumn3}
-        {#if filteredPosts && filteredPosts.length > 0}
-          {#each filteredPosts as post (post._id)}
-            <button
-              on:click={() => selectedPost = post}
-              class:selected={selectedPost?._id === post._id}
-            >
-              {#if selectedMedia === 'photo'}
-                |_ <span class="thumbnail"><img src={urlFor(post.mainImage).width(12).height(12).url()} alt="img" /></span> {post.title}
-              {/if}
+  {#if selectedCategory === 'gallery' && selectedMedia}
+    <ul>
+      {@html brTagsColumn3}
 
-              {#if selectedMedia === 'video'}
-                |_ video.mov
+      {#if filteredPosts && filteredPosts.length > 0}
+        {#each filteredPosts as post (post._id)}
+          <button
+            on:click={() => selectedPost = post}
+            class:selected={selectedPost?._id === post._id}
+          >
+            <span class="thumbnail">
+              {#if selectedMedia === 'photo' || selectedMedia === 'video' || selectedMedia === 'audio'}
+                |_<img 
+                  src={urlFor(post.mainImage).width(12).height(12).url()} 
+                  alt="{post.title}" 
+                />
               {/if}
-
-              {#if selectedMedia === 'audio'}
-                |_ <span class="thumbnail"><img src={urlFor(post.mainImage).width(12).height(12).url()} alt="img" /></span> {post.title}
-              {/if}
-            </button>
-          {/each}
-        {/if}
-      </ul>
-    {/if}
+            </span>
+            {post.title}
+          </button>
+        {/each}
+      {/if}
+    </ul>
   {/if}
 </div>
 
