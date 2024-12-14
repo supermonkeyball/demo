@@ -7,10 +7,10 @@
 </script>
 
 <a class="card" href={`/post/${post.slug.current}`}>
-	{#if post.mainImage}
+	{#if post.thumbnail}
 		<img
 			class="card__cover"
-			src={urlFor(post.mainImage).width(500).height(300).url()}
+			src={urlFor(post.thumbnail).width(500).height(300).url()}
 			alt="Cover image for {post.title}"
 		/>
 	{:else}

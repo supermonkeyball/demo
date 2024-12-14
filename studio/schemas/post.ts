@@ -27,6 +27,19 @@ export default defineType({
       rows: 4,
     }),
     defineField({
+      name: 'myTags',
+      title: 'Tags',
+      type: 'tags',
+      includeFromReference: 'folder',
+      validation: (Rule) => Rule.required(),
+      options: {
+        onCreate: (value) => ({
+          label: value,
+          value: value.toLowerCase().replace(/\W/g, '-'),
+        }),
+      },
+    }),
+    defineField({
       name: 'mainImage',
       title: 'Main image',
       type: 'image',
@@ -43,12 +56,12 @@ export default defineType({
   preview: {
     select: {
       title: 'title',
-      author: 'author.name',
+      author: 'myTags.label',
       media: 'mainImage',
     },
     prepare(selection) {
       const {author} = selection
-      return {...selection, subtitle: author && `by ${author}`}
+      return {...selection, subtitle: author && `hello ${author}`}
     },
   },
 })
