@@ -30,11 +30,11 @@ export default defineType({
   preview: {
     select: {
       title: 'title',
-      tag: 'tag',  // Corrected: `tag` instead of `name`
+      tag: 'tag', 
     },
     prepare(selection) {
-      const { tag } = selection; // Corrected to use `tag`
-      return { ...selection, subtitle: tag && `Tag: ${tag}` }; // Corrected to show `tag`
+      const { tag } = selection;
+      return { ...selection, subtitle: tag && `#${tag}` };
     },
   },
 });

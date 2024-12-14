@@ -21,6 +21,14 @@ export default defineType({
       },
     }),
     defineField({
+      name: 'thumbnail',
+      title: 'Thumbnail',
+      type: 'image',
+      options: {
+        hotspot: true, 
+      },
+    }),
+    defineField({
       name: 'excerpt',
       title: 'Excerpt',
       type: 'text',
@@ -45,6 +53,14 @@ export default defineType({
       options: {
         hotspot: true,
       },
+    }),   
+    defineField({
+      name: 'audio',
+      title: 'Audio',
+      type: 'file',      
+      options: {
+        accept: 'audio/*',
+      },
     }),
     defineField({
       name: 'body',
@@ -56,11 +72,11 @@ export default defineType({
     select: {
       title: 'title',
       tags: 'tags',
-      media: 'mainImage',
+      media: 'thumbnail',
     },
     prepare(selection) {
       const {author} = selection
-      return {...selection, subtitle: author && `hello ${tags}`}
-    },
+      return {...selection, subtitle: author && `# ${tags}`}
+    },  
   },
 })

@@ -38,6 +38,11 @@
 
   $: br1 = selectedCategory ? '<br>'.repeat(categories.indexOf(selectedCategory) + 1) : '';
   $: br2 = selectedMedia ? '<br>'.repeat(mediaTypes.indexOf(selectedMedia) + 2) : '';
+  
+  $: {
+    console.log('posts:', posts);  
+    console.log('selectedPost:', selectedPost);  
+  }
 </script>
 
 <section>
@@ -83,10 +88,13 @@
               >
                 <span class="thumbnail">
                   {#if selectedMedia === 'photo' || selectedMedia === 'video' || selectedMedia === 'audio'}
-                    |_<img 
-                      src={urlFor(post.mainImage).width(12).height(12).url()} 
-                      alt="{post.title}" 
-                    />
+                    |_
+                    {#if post.thumbnail}
+                      <img 
+                      src={urlFor(post.thumbnail).width(12).height(12).url()} 
+                      alt="img" 
+                      />
+                     {/if}
                   {/if}
                 </span>
                 {post.title}
@@ -97,22 +105,30 @@
       {/if}
     </div>
 
-    <div class="window">
-      {#if selectedPost}
-        {#if selectedPost.mainImage}
-          <img
-            src={urlFor(selectedPost.mainImage).url()}
-            alt="image for {selectedPost.title}"
-          />
-        {/if}
-        {#if selectedPost.body}
-          <p><PortableText value={selectedPost.body} /></p>
-        {/if}
-      {/if}
-    </div>
+<div class="window">
+{#if selectedPost}
+  {#if selectedPost.mainImage}
+    <img src={urlFor(selectedPost.mainImage).url()} alt="image for {selectedPost.title}" />
+  {/if}
+  
+  {#if selectedPost.audio?.asset?.url}
+    <audio controls>
+      <source 
+        src={selectedPost.audio.asset.url} 
+        type={selectedPost.audio.asset.metadata?.mimeType || 'audio/mpeg'} 
+      />
+    </audio>
+  {/if}
+
+  {#if selectedPost.body}
+    <p><PortableText value={selectedPost.body} /></p>
+  {/if}
+{/if}
+</div>
 
   </div>
 </section>
+
 
 <style>
   .container {

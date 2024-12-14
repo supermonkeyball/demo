@@ -8,14 +8,21 @@ export const postsQuery = groq`*[_type == "post"]{
   _id,
   title,
   slug,
+  thumbnail,
   tags[]->{
     _id,
     name,
     slug
   },
   mainImage,
+  audio {
+    asset->{
+      url,
+      metadata { mimeType }
+    }
+  },
   body
-} | order(_createdAt desc)`;
+} | order(title asc)`
 
 export interface Tagging {
   _id: string;
@@ -28,8 +35,17 @@ export interface Post {
   _createdAt: string;
   title?: string;
   slug: Slug;
+  thumbnail?: ImageAsset;
   excerpt?: string;
   mainImage?: ImageAsset;
-  tags: Tagging[]; // Corrected to Tagging[] to match the Tagging interface
+  tags: Tagging[]; 
   body: PortableTextBlock[];
+  audio?: {
+    asset: {
+      url: string;
+      metadata: {
+        mimeType: string;
+      };
+    };
+  };
 }
