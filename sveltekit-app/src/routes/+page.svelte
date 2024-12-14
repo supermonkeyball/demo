@@ -1,6 +1,7 @@
 <script lang="ts">
   import { useQuery } from '@sanity/svelte-loader';
   import { urlFor } from '$lib/sanity/image';
+  import { PortableText } from '@portabletext/svelte';
   import type { PageData } from './$types';
   import type { Post } from '$lib/sanity/queries';
   import type { Tagging } from '$lib/sanity/queries';
@@ -29,8 +30,14 @@
     }
   }
 
-  $: brTagsColumn2 = selectedCategory ? '<br>'.repeat(categories.indexOf(selectedCategory) + 1) : '';
-  $: brTagsColumn3 = selectedMedia ? '<br>'.repeat(mediaTypes.indexOf(selectedMedia) + 2) : '';
+  $: {
+    if (selectedCategory === 'about') {
+      selectedPost = posts?.find(post => post.title.toLowerCase() === 'about') || null;
+    }
+  }
+
+  $: br1 = selectedCategory ? '<br>'.repeat(categories.indexOf(selectedCategory) + 1) : '';
+  $: br2 = selectedMedia ? '<br>'.repeat(mediaTypes.indexOf(selectedMedia) + 2) : '';
 </script>
 
 <section>
@@ -51,7 +58,7 @@
     <div class="column2">
       {#if selectedCategory === 'gallery'}
         <ul>
-          {@html brTagsColumn2}
+          {@html br1}
           {#each mediaTypes as media}
             <button 
               on:click={() => { selectedMedia = media; selectedPost = null; }} 
@@ -67,7 +74,7 @@
     <div class="column3">
       {#if selectedCategory === 'gallery' && selectedMedia}
         <ul>
-          {@html brTagsColumn3}
+          {@html br2}
           {#if filteredPosts && filteredPosts.length > 0}
             {#each filteredPosts as post (post._id)}
               <button
@@ -98,12 +105,12 @@
             alt="image for {selectedPost.title}"
           />
         {/if}
-      {/if}
-
-      {#if selectedCategory === 'about'}
-        <p>emad is an interdisciplinary artist based in new york. their primary interests include looping feedback systems, emergent patterns in synthesized and natural environments, and the development of accessible and expressive interactive interfaces.</p>
+        {#if selectedPost.body}
+          <p><PortableText value={selectedPost.body} /></p>
+        {/if}
       {/if}
     </div>
+
   </div>
 </section>
 

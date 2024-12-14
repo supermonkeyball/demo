@@ -12,16 +12,15 @@ body {
 	margin: 0 auto;
 }
 
-  button {
+  ul, p, button {
     all: unset;
+  }
+
+  button {
     width: 100%;
     cursor: pointer;
   }
 
   button.selected {
     background-color: var(--highlight);
-  }
-
-  ul {
-    all: unset;
   }
