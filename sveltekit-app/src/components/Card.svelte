@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { formatDate } from '$lib/utils';
 	import { urlFor } from '$lib/sanity/image';
-	import type { Post } from '$lib/sanity/queries';
+	import type { audio } from '$lib/sanity/queries';
 
-	export let post: Post;
+	export let audio: Audio;
 </script>
 
-<a class="card" href={`/post/${post.slug.current}`}>
-	{#if post.thumbnail}
+<a class="card" href={`/audio/${audio.slug.current}`}>
+	{#if audio.thumbnail}
 		<img
 			class="card__cover"
-			src={urlFor(post.thumbnail).width(500).height(300).url()}
-			alt="Cover image for {post.title}"
+			src={urlFor(audio.thumbnail).width(500).height(300).url()}
+			alt="Cover image for {audio.title}"
 		/>
 	{:else}
 		<div class="card__cover--none" />
@@ -19,13 +19,13 @@
 
 	<div class="card__container">
 		<h3 class="card__title">
-			{post.title}
+			{audio.title}
 		</h3>
-		{#if post.excerpt}
-			<p class="card__excerpt">{post.excerpt}</p>
+		{#if audio.excerpt}
+			<p class="card__excerpt">{audio.excerpt}</p>
 		{/if}
 		<p class="card__date">
-			{formatDate(post._createdAt)}
+			{formatDate(audio._createdAt)}
 		</p>
 	</div>
 </a>

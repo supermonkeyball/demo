@@ -1,6 +1,5 @@
 import blockContent from './blockContent'
-import folder from './folder'
+import tagging from './tagging';
 import post from './post'
-import audio from './audio'
 
-export const schemaTypes = [audio, folder, post, blockContent]
+export const schemaTypes = [tagging, post, blockContent]

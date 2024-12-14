@@ -1,8 +1,8 @@
-import {defineField, defineType} from 'sanity';
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
-  name: 'audio',
-  title: 'Audio',
+  name: 'tagging',
+  title: 'Tagging',
   type: 'document',
   fields: [
     defineField({
@@ -21,31 +21,20 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'thumbnail',
-      title: 'Thumbnail',
-      type: 'image',
-    }),
-    defineField({
-      name: 'file',
-      title: 'File',
-      type: 'file',
-      options: {
-        accept: '.mp3,.wav,.ogg',
-      },
-    }),
-    defineField({
-      name: 'body',
-      title: 'Body',
-      type: 'blockContent',
+      name: 'tag',
+      title: 'Tag',
+      type: 'string',
+      validation: (Rule) => Rule.required().min(1).max(50),
     }),
   ],
   preview: {
     select: {
       title: 'title',
-      media: 'thumbnail', 
+      tag: 'tag',  // Corrected: `tag` instead of `name`
     },
     prepare(selection) {
-      return {...selection};
+      const { tag } = selection; // Corrected to use `tag`
+      return { ...selection, subtitle: tag && `Tag: ${tag}` }; // Corrected to show `tag`
     },
   },
 });

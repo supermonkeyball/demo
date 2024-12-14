@@ -27,17 +27,16 @@ export default defineType({
       rows: 4,
     }),
     defineField({
-      name: 'myTags',
+      name: 'tags',
       title: 'Tags',
-      type: 'tags',
-      includeFromReference: 'folder',
-      validation: (Rule) => Rule.required(),
-      options: {
-        onCreate: (value) => ({
-          label: value,
-          value: value.toLowerCase().replace(/\W/g, '-'),
-        }),
-      },
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'tagging' }],
+        },
+      ],
+      validation: (Rule: any) => Rule.unique(),
     }),
     defineField({
       name: 'mainImage',
@@ -56,12 +55,12 @@ export default defineType({
   preview: {
     select: {
       title: 'title',
-      author: 'myTags.label',
+      tags: 'tags',
       media: 'mainImage',
     },
     prepare(selection) {
       const {author} = selection
-      return {...selection, subtitle: author && `hello ${author}`}
+      return {...selection, subtitle: author && `hello ${tags}`}
     },
   },
 })
