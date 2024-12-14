@@ -4,7 +4,7 @@
   import type { PageData } from './$types';
   import type { Post } from '$lib/sanity/queries';
   import type { Tagging } from '$lib/sanity/queries';
-  import Window from '../components/window.svelte';
+  import Window from '../components/Window.svelte';
 
   export let post: Post;
   export let data: PageData;
@@ -16,8 +16,8 @@
   let selectedMedia = null;
   let selectedPost = null;
 
-  const categories = ['gallery', 'diary', 'info'];
-  const label = ['audio', 'photo', 'video', 'about'];
+  const categories = ['gallery', 'diary', 'about'];
+  const label = ['audio', 'photo', 'video'];
 
   $: filteredPosts = posts?.filter(post => {
     if (!post.tags) return false;
@@ -27,6 +27,12 @@
   $: {
     if (selectedCategory !== 'gallery' || !selectedMedia) {
       selectedPost = null;  
+    }
+  }
+
+  $: {
+    if (selectedCategory === 'about') {
+      selectedPost = posts?.find(post => post.title.toLowerCase() === 'about') || null;
     }
   }
 
@@ -51,19 +57,6 @@
 
     <div class="column2">
       {#if selectedCategory === 'gallery'}
-        <ul>
-          {@html br1}
-          {#each label as media}
-            <button 
-              on:click={() => { selectedMedia = media; selectedPost = null; }} 
-              class:selected={selectedMedia === media}
-            >
-              |_{media}
-            </button>
-          {/each}
-        </ul>
-      {/if}
-      {#if selectedCategory === 'info'}
         <ul>
           {@html br1}
           {#each label as media}
