@@ -11,7 +11,7 @@ export const postsQuery = groq`*[_type == "post"]{
   thumbnail,
   tags[]->{
     _id,
-    name,
+    tag,  
     slug
   },
   mainImage,

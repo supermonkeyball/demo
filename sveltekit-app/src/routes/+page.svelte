@@ -1,10 +1,10 @@
 <script lang="ts">
   import { useQuery } from '@sanity/svelte-loader';
   import { urlFor } from '$lib/sanity/image';
-  import { PortableText } from '@portabletext/svelte';
   import type { PageData } from './$types';
   import type { Post } from '$lib/sanity/queries';
   import type { Tagging } from '$lib/sanity/queries';
+  import Window from '../components/window.svelte';
 
   export let post: Post;
   export let data: PageData;
@@ -16,8 +16,8 @@
   let selectedMedia = null;
   let selectedPost = null;
 
-  const categories = ['gallery', 'diary', 'about'];
-  const mediaTypes = ['audio', 'photo', 'video'];
+  const categories = ['gallery', 'diary', 'info'];
+  const label = ['audio', 'photo', 'video', 'about'];
 
   $: filteredPosts = posts?.filter(post => {
     if (!post.tags) return false;
@@ -30,19 +30,8 @@
     }
   }
 
-  $: {
-    if (selectedCategory === 'about') {
-      selectedPost = posts?.find(post => post.title.toLowerCase() === 'about') || null;
-    }
-  }
-
   $: br1 = selectedCategory ? '<br>'.repeat(categories.indexOf(selectedCategory) + 1) : '';
-  $: br2 = selectedMedia ? '<br>'.repeat(mediaTypes.indexOf(selectedMedia) + 2) : '';
-  
-  $: {
-    console.log('posts:', posts);  
-    console.log('selectedPost:', selectedPost);  
-  }
+  $: br2 = selectedMedia ? '<br>'.repeat(label.indexOf(selectedMedia) + 2) : '';
 </script>
 
 <section>
@@ -64,7 +53,20 @@
       {#if selectedCategory === 'gallery'}
         <ul>
           {@html br1}
-          {#each mediaTypes as media}
+          {#each label as media}
+            <button 
+              on:click={() => { selectedMedia = media; selectedPost = null; }} 
+              class:selected={selectedMedia === media}
+            >
+              |_{media}
+            </button>
+          {/each}
+        </ul>
+      {/if}
+      {#if selectedCategory === 'info'}
+        <ul>
+          {@html br1}
+          {#each label as media}
             <button 
               on:click={() => { selectedMedia = media; selectedPost = null; }} 
               class:selected={selectedMedia === media}
@@ -105,26 +107,9 @@
       {/if}
     </div>
 
-<div class="window">
-{#if selectedPost}
-  {#if selectedPost.mainImage}
-    <img src={urlFor(selectedPost.mainImage).url()} alt="image for {selectedPost.title}" />
-  {/if}
-  
-  {#if selectedPost.audio?.asset?.url}
-    <audio controls>
-      <source 
-        src={selectedPost.audio.asset.url} 
-        type={selectedPost.audio.asset.metadata?.mimeType || 'audio/mpeg'} 
-      />
-    </audio>
-  {/if}
-
-  {#if selectedPost.body}
-    <p><PortableText value={selectedPost.body} /></p>
-  {/if}
-{/if}
-</div>
+      {#if selectedPost}
+        <Window {selectedPost} />
+      {/if}
 
   </div>
 </section>
@@ -138,17 +123,6 @@
     height: 100vh;
     overflow: hidden;
     padding: 10px;
-  }
-
-  .window {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .window img, p {
-    width: 50%;
   }
 
   @media (max-width: 768px) {

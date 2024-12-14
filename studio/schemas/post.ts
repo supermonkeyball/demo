@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'post',
@@ -25,14 +25,8 @@ export default defineType({
       title: 'Thumbnail',
       type: 'image',
       options: {
-        hotspot: true, 
+        hotspot: true,
       },
-    }),
-    defineField({
-      name: 'excerpt',
-      title: 'Excerpt',
-      type: 'text',
-      rows: 4,
     }),
     defineField({
       name: 'tags',
@@ -44,20 +38,20 @@ export default defineType({
           to: [{ type: 'tagging' }],
         },
       ],
-      validation: (Rule: any) => Rule.unique(),
+      validation: (Rule) => Rule.unique(),
     }),
     defineField({
       name: 'mainImage',
-      title: 'Main image',
+      title: 'Main Image',
       type: 'image',
       options: {
         hotspot: true,
       },
-    }),   
+    }),
     defineField({
       name: 'audio',
       title: 'Audio',
-      type: 'file',      
+      type: 'file',
       options: {
         accept: 'audio/*',
       },
@@ -71,12 +65,21 @@ export default defineType({
   preview: {
     select: {
       title: 'title',
-      tags: 'tags',
+      tags: 'tags', 
       media: 'thumbnail',
     },
-    prepare(selection) {
-      const {author} = selection
-      return {...selection, subtitle: author && `# ${tags}`}
-    },  
-  },
-})
+  prepare(selection) {
+    const { title, tags = [], media } = selection;
+
+    console.log('Tags in Preview:', tags);  
+
+    const tagNames = tags.map(tag => tag?.tag).join(', ') || 'No tags';
+
+    return {
+      title,
+      subtitle: tagNames, 
+      media,
+    };
+  }
+}
+});
