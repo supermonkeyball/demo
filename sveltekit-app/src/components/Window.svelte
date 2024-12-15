@@ -45,7 +45,7 @@
   {/if}
   
   {#if selectedPost.audio?.asset?.url}
-    <center>{selectedPost.title}</center>
+    <center>playing {selectedPost.title}</center>
   {/if}
 
   {#if selectedPost.body}
@@ -63,5 +63,16 @@
 
   .window img, p {
     width: 50%;
+  }
+
+  @media (max-width: 768px) {
+    .window {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
+    .window img, p {
+      width: 75%;
+    }
   }
 </style>

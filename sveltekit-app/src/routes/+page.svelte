@@ -122,14 +122,5 @@
     .container {
       grid-template-rows: auto 1fr;
     }
-
-    .window {
-      grid-column: 1 / -1;
-      grid-row: 2;
-    }
-
-    .window img, p {
-      width: 75%;
-    }
   }
 </style>
